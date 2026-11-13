@@ -1,0 +1,28 @@
+registerCourse:
+  handler: src/handlers/registrations/registerCourse.handler
+  events:
+    - httpApi:
+        method: POST
+        path: /api/registrations
+        authorizer:
+          name: cognitoAuthorizer
+
+
+getMyRegistrations:
+  handler: src/handlers/registrations/getMyRegistrations.handler
+  events:
+    - httpApi:
+        method: GET
+        path: /api/registrations
+        authorizer:
+          name: cognitoAuthorizer          
+
+
+unregisterCourse:
+  handler: src/handlers/registrations/unregisterCourse.handler
+  events:
+    - httpApi:
+        method: DELETE
+        path: /api/registrations/{courseId}
+        authorizer:
+          name: cognitoAuthorizer         

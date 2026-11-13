@@ -1,0 +1,84 @@
+
+Resources:
+
+  # ==========================================
+  # USERS TABLE
+  # ==========================================
+
+  UsersTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: coursely-users
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: userId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: userId
+          KeyType: HASH
+
+  # Example item:
+  # {
+  #   "email": "debraj@example.com",
+  #   "userId": "USR001",
+  #   "name": "Debraj",
+  #   "createdAt": "2026-11-13T10:30:00Z"
+  # }
+
+
+  # ==========================================
+  # COURSES TABLE
+  # ==========================================
+
+  CoursesTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: coursely-courses
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: courseId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: courseId
+          KeyType: HASH
+
+
+  # Example item:
+  # {
+  #   "courseId": "CRS001",
+  #   "title": "Angular Development",
+  #   "description": "Learn Angular from fundamentals to advanced concepts.",
+  #   "instructor": "John Smith",
+  #   "duration": "8 weeks",
+  #   "level": "Intermediate",
+  #   "status": "ACTIVE",
+  #   "createdAt": "2026-11-13T10:30:00Z"
+  # }
+
+  # ==========================================
+  # REGISTRATIONS TABLE
+  # ==========================================
+
+  RegistrationsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: coursely-registrations
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: studentId
+          AttributeType: S
+        - AttributeName: courseId
+          AttributeType: S
+      KeySchema:
+        - AttributeName: studentId
+          KeyType: HASH
+        - AttributeName: courseId
+          KeyType: RANGE
+
+
+  # Example item:
+  # {
+  #   "studentId": "USR001",
+  #   "courseId": "CRS001",
+  #   "registeredAt": "2026-11-13T10:30:00Z"
+  # }

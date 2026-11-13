@@ -1,0 +1,49 @@
+org: debrajbasak23
+service: coursely-backend
+useDotenv: true
+
+plugins:
+  - serverless-iam-roles-per-function
+
+provider:
+  name: aws
+  runtime: nodejs24.x
+  architecture: arm64
+  region: ap-south-1
+
+  environment:
+    COGNITO_USER_POOL_ID: ${env:COGNITO_USER_POOL_ID}
+    COGNITO_CLIENT_ID: ${env:COGNITO_CLIENT_ID}
+
+  httpApi:
+    authorizers:
+      cognitoAuthorizer:
+        type: jwt
+        identitySource: "$request.header.Authorization"
+        issuerUrl: https://cognito-idp.${self:provider.region}.amazonaws.com/${env:COGNITO_USER_POOL_ID}
+        audience:
+          - ${env:COGNITO_CLIENT_ID}
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+            - dynamodb:Scan
+            - dynamodb:Query
+            - dynamodb:BatchWriteItem
+            - dynamodb:TransactWriteItems
+            - dynamodb:BatchGetItem
+          Resource:
+            - Fn::GetAtt: [UsersTable, Arn]
+            - Fn::GetAtt: [CoursesTable, Arn]
+            - Fn::GetAtt: [RegistrationsTable, Arn]
+
+functions: ${file(./dist/src/configs/function.js)}
+
+resources:
+  - ${file(./src/ymls/dynamo.yml)}

@@ -1,0 +1,19 @@
+syncCourses:
+  handler: src/handlers/courses/syncCourses.handler
+
+
+getCourses:
+  handler: src/handlers/courses/getCourses.handler
+  events:
+    - httpApi:
+        method: GET
+        path: /api/courses
+
+getCourseById:
+  handler: src/handlers/courses/getCourseById.handler
+  events:
+    - httpApi:
+        method: GET
+        path: /api/courses/{courseId}
+
+        

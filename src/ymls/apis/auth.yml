@@ -1,0 +1,2 @@
+postConfirmation:
+  handler: src/handlers/auth/postConfirmation.handler
