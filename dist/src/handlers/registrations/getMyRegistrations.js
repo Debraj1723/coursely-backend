@@ -7,7 +7,7 @@ const handler = async (event) => {
     try {
         // 1. Get authenticated student ID from Cognito
         const studentId = event.requestContext.authorizer.jwt.claims.sub;
-        if (typeof studentId !== "string" || !studentId) {
+                if (typeof studentId !== "string" || !studentId) {
             return {
                 statusCode: 401,
                 body: JSON.stringify({

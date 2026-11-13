@@ -86,7 +86,9 @@ const queryDynamoItems = async (table, keyConditionExpression, expressionAttribu
         const params = {
             TableName: table,
             KeyConditionExpression: keyConditionExpression,
-            ExpressionAttributeNames: expressionAttributeNames,
+            ...(Object.keys(expressionAttributeNames).length > 0 && {
+                ExpressionAttributeNames: expressionAttributeNames,
+            }),
             ExpressionAttributeValues: expressionAttributeValues,
         };
         const res = await sendDynamoCommand(new lib_dynamodb_1.QueryCommand(params));
@@ -176,9 +178,9 @@ const batchGetDynamoItems = async (table, keys) => {
         const result = await sendDynamoCommand(new lib_dynamodb_1.BatchGetCommand({
             RequestItems: {
                 [table]: {
-                    Keys: keys
-                }
-            }
+                    Keys: keys,
+                },
+            },
         }));
         return result.Responses?.[table] ?? [];
     }

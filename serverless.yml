@@ -10,12 +10,14 @@ provider:
   runtime: nodejs24.x
   architecture: arm64
   region: ap-south-1
+  
 
   environment:
     COGNITO_USER_POOL_ID: ${env:COGNITO_USER_POOL_ID}
     COGNITO_CLIENT_ID: ${env:COGNITO_CLIENT_ID}
 
   httpApi:
+    cors: true
     authorizers:
       cognitoAuthorizer:
         type: jwt

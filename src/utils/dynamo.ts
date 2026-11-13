@@ -3,11 +3,9 @@ import {
   GetCommand,
   ScanCommand,
   QueryCommand,
-  UpdateCommand,
-  DeleteCommand,
   BatchWriteCommand,
   TransactWriteCommand,
-  BatchGetCommand
+  BatchGetCommand,
 } from "@aws-sdk/lib-dynamodb";
 
 import type { ScanCommandInput } from "@aws-sdk/lib-dynamodb";
@@ -124,7 +122,9 @@ export const queryDynamoItems = async (
     const params = {
       TableName: table,
       KeyConditionExpression: keyConditionExpression,
-      ExpressionAttributeNames: expressionAttributeNames,
+      ...(Object.keys(expressionAttributeNames).length > 0 && {
+        ExpressionAttributeNames: expressionAttributeNames,
+      }),
       ExpressionAttributeValues: expressionAttributeValues,
     };
 
@@ -136,7 +136,6 @@ export const queryDynamoItems = async (
     throw error;
   }
 };
-
 
 // Common batch write function
 const batchWriteDynamoItems = async (
@@ -239,7 +238,7 @@ const addTimestamps = (item: any) => {
 // Get multiple items by their primary keys
 export const batchGetDynamoItems = async (
   table: string,
-  keys: Record<string, any>[]
+  keys: Record<string, any>[],
 ): Promise<Record<string, any>[]> => {
   try {
     if (keys.length === 0) return [];
@@ -248,14 +247,13 @@ export const batchGetDynamoItems = async (
       new BatchGetCommand({
         RequestItems: {
           [table]: {
-            Keys: keys
-          }
-        }
-      })
+            Keys: keys,
+          },
+        },
+      }),
     );
 
     return result.Responses?.[table] ?? [];
-
   } catch (error) {
     console.error("Batch get DynamoDB items failed:", error);
     throw error;
